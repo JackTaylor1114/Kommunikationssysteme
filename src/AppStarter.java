@@ -4,6 +4,7 @@ public class AppStarter {
     private Server server;
     private Worker worker;
 
+    /* Main Method, starts Client, Server or Worker based on parameter */
     public static void main(String[] args) {
         switch(args[0]){
             case "client":
