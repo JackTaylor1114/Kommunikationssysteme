@@ -1,14 +1,15 @@
 public class AppStarter {
 
-    private Client client;
-    private Server server;
-    private Worker worker;
+    private static Client client;
+    private static Server server;
+    private static Worker worker;
 
     /* Main Method, starts Client, Server or Worker based on parameter */
     public static void main(String[] args) {
         switch(args[0]){
             case "client":
-                //Start Client
+                client = new Client();
+                client.run();
                 break;
             case "server":
                 //Start server
