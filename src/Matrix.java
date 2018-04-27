@@ -1,57 +1,30 @@
+import java.util.ArrayList;
+
+/* Class representing a matrix, consisting of multiple rows and columns */
 public class Matrix {
 
-    private double[][] data = null;
-    private int cols = 0, rows = 0;
+    private ArrayList<MatrixRow> rows = new ArrayList<>();
+    private ArrayList<MatrixColumn> columns = new ArrayList<>();
 
-    public Matrix(int rows, int cols) {
-        data = new double[rows][cols];
-        this.rows = rows;
-        this.cols = cols;
+    public Matrix() {}
+
+    /* Add a row */
+    public void addRow(MatrixRow row) {
+        rows.add(row);
     }
 
-    public Matrix(double[][] data) {
-        this.data = data.clone();
-        rows = this.data.length;
-        cols = this.data[0].length;
+    /* Return all rows */
+    public ArrayList<MatrixRow> getRows() {
+        return rows;
     }
 
-    public void setData(double[][] data){
-        this.data = data.clone();
-        rows = this.data.length;
-        cols = this.data[0].length;
+    /* Add a column */
+    public void addColumn(MatrixColumn column) {
+        columns.add(column);
     }
 
-    public void setValue(int row, int col, double Value) throws Exception {
-        if(row>rows||col>cols)
-            throw new Exception("Position is not in Martix");
-        else
-            data[row][col]=Value;
-    }
-
-    public void display() {
-        System.out.print("[");
-        for (int row = 0; row < rows; ++row) {
-            if (row != 0) {
-                System.out.print(" ");
-            }
-
-            System.out.print("[");
-
-            for (int col = 0; col < cols; ++col) {
-                System.out.printf("%8.3f", data[row][col]);
-
-                if (col != cols - 1) {
-                    System.out.print(" ");
-                }
-            }
-
-            System.out.print("]");
-
-            if (row == rows - 1) {
-                System.out.print("]");
-            }
-
-            System.out.println();
-        }
+    /* Return all columns */
+    public ArrayList<MatrixColumn> getColumns() {
+        return columns;
     }
 }

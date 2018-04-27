@@ -4,7 +4,7 @@ public class AppStarter {
     private static Server server;
     private static Worker worker;
 
-    /* Main Method, starts Client, Server or Worker based on parameter */
+    /* Main Method, starts Client, Server or Worker based on parameter input */
     public static void main(String[] args) {
         switch(args[0]){
             case "client":
@@ -18,6 +18,5 @@ public class AppStarter {
                 //Start worker
                 break;
         }
-        System.out.println("Test Test");
     }
 }
