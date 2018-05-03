@@ -1,4 +1,4 @@
-public class AppStarter {
+class AppStarter {
 
     /* Main Method, starts Client, Server or Worker based on parameter input */
     public static void main(String[] args) {
