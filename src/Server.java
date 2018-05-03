@@ -1,30 +1,29 @@
 import org.zeromq.ZMQ;
 
-public class Server {
+class Server {
 
-    public void run() {
+    @SuppressWarnings("all")
+    private final String ip = "localhost";
+    @SuppressWarnings("all")
+    private final String port = ":5555";
+    @SuppressWarnings("all")
+    private final String protocol = "tcp://";
+
+    void run() {
         System.out.println("Server is starting");
-        ZMQ.Context context;
-        ZMQ.Socket socket;
-        context = ZMQ.context(1);
-        socket = context.socket(ZMQ.ROUTER);
-        socket.bind("tcp://*:5555");
+        ZMQ.Context context = ZMQ.context(1);
+        ZMQ.Socket socket = context.socket(ZMQ.REP);
+        System.out.println("Server is binding address " + protocol + ip + port);
+        socket.bind(protocol + ip + port);
 
         while (!Thread.currentThread().isInterrupted()) {
-            byte[] recvData;
-            while (true) {
-                recvData = socket.recv();
-                System.out.println(new String(recvData));
-                switch (new String(recvData)){
-                    case "Client":
-                        System.out.println("Client connected successfully");
-                        break;
-                    case "Matrix":
-                        //process matrix
+            byte[] message = socket.recv();
 
-                    default:
-
-                }
+            switch (new String(message)) {
+                case "Client":
+                    System.out.println("Client connected");
+                    socket.send("Server received connection by you!");
+                    break;
             }
         }
         socket.close();
