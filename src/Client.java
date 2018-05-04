@@ -8,15 +8,23 @@ class Client {
     private final String port = ":5555";
     @SuppressWarnings("all")
     private final String protocol = "tcp://";
+    @SuppressWarnings("all")
+    private final String id = "client";
 
     void run() {
         System.out.println("Client is starting");
         ZMQ.Context context = ZMQ.context(1);
-        ZMQ.Socket socket = context.socket(ZMQ.REQ);
+        ZMQ.Socket socket = context.socket(ZMQ.DEALER);
+        socket.setIdentity(id.getBytes());
         socket.connect(protocol + ip + port);
         System.out.println("Client connecting to Server " + protocol + ip + port);
-        socket.send("Client",ZMQ.REP);
-        System.out.println(new String(socket.recv()));
+        socket.send("Client",ZMQ.SNDMORE);
+        socket.send(socket.getIdentity(), ZMQ.SNDMORE);
+        socket.send("Data, dude trust me", 0);
+
+        byte[] message = socket.recv();
+        System.out.println(new String (message));
+
         socket.close();
         context.term();
 

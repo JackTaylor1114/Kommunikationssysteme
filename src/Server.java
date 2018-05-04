@@ -12,7 +12,7 @@ class Server {
     void run() {
         System.out.println("Server is starting");
         ZMQ.Context context = ZMQ.context(1);
-        ZMQ.Socket socket = context.socket(ZMQ.REP);
+        ZMQ.Socket socket = context.socket(ZMQ.ROUTER);
         System.out.println("Server is binding address " + protocol + ip + port);
         socket.bind(protocol + ip + port);
 
@@ -22,7 +22,18 @@ class Server {
             switch (new String(message)) {
                 case "Client":
                     System.out.println("Client connected");
-                    socket.send("Server received connection by you!");
+
+                    message = socket.recv();
+
+                    System.out.println("ID: " + new String(message));
+
+                    message = socket.recv();
+
+                    System.out.println("Data: " + new String(message));
+
+                    socket.send("client", ZMQ.SNDMORE);
+                    socket.send("Answer from the Server", 0);
+
                     break;
             }
         }
