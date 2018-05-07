@@ -1,3 +1,4 @@
+import org.apache.commons.lang.SerializationUtils;
 import org.zeromq.ZMQ;
 
 class Server {
@@ -8,6 +9,9 @@ class Server {
     private final String port = ":5555";
     @SuppressWarnings("all")
     private final String protocol = "tcp://";
+
+    private Matrix matrix1;
+    private Matrix matrix2;
 
     void run() {
         System.out.println("Server is starting");
@@ -34,6 +38,17 @@ class Server {
                     socket.send("client", ZMQ.SNDMORE);
                     socket.send("Answer from the Server", 0);
 
+                    break;
+
+                case "newMatrix":
+                    System.out.println("Receiving Matrix");
+
+                    message = socket.recv();
+                    matrix1  = (Matrix) SerializationUtils.deserialize(message);
+                    System.out.println(matrix1.getRows().get(0).getValues()[0]);
+
+                    message = socket.recv();
+                    matrix2  = (Matrix) SerializationUtils.deserialize(message);
                     break;
             }
         }

@@ -1,5 +1,7 @@
+import java.io.Serializable;
+
 /* Class representing a matrix column */
-public class MatrixColumn {
+public class MatrixColumn implements Serializable {
 
     private int[] values;
     private int index;

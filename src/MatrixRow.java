@@ -1,5 +1,7 @@
+import java.io.Serializable;
+
 /* Class representing a matrix row */
-public class MatrixRow {
+public class MatrixRow implements Serializable {
 
     private int[] values;
     private int index;

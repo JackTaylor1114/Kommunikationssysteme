@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /* Class representing a matrix, consisting of multiple rows and columns */
-public class Matrix {
+public class Matrix implements Serializable {
 
     private ArrayList<MatrixRow> rows = new ArrayList<>();
     private ArrayList<MatrixColumn> columns = new ArrayList<>();
