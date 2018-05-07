@@ -14,25 +14,33 @@ class Client {
     @SuppressWarnings("all")
     private final String id = "client";
 
+    /* Client RUN method */
     void run() {
         System.out.println("Client is starting");
         ZMQ.Context context = ZMQ.context(1);
         ZMQ.Socket socket = context.socket(ZMQ.DEALER);
         socket.setIdentity(id.getBytes());
         socket.connect(protocol + ip + port);
+
+        //Connect to the server
         System.out.println("Client connecting to Server " + protocol + ip + port);
         socket.send("Client",ZMQ.SNDMORE);
-        socket.send(socket.getIdentity(), ZMQ.SNDMORE);
-        socket.send("Data, dude trust me", 0);
+        socket.send(socket.getIdentity(), 0);
 
+        //Get feedback by the server
         byte[] message = socket.recv();
         System.out.println(new String (message));
-        System.out.println("Press ENTER to send Matrix");
+
+        //Wait for console input and then send matrices to server
+        System.out.println("Press any KEY to send matrix to the server!");
         try {
             System.in.read();
         }
         catch(IOException e){
-            //lol
+            System.out.println("Something went wrong when reading from console, please restart the client.");
+            socket.close();
+            context.term();
+            System.exit(0);
         }
         socket.send("newMatrix", ZMQ.SNDMORE);
         socket.send(SerializationUtils.serialize(buildMatrix1()),ZMQ.SNDMORE);
@@ -40,12 +48,11 @@ class Client {
         socket.close();
         context.term();
 
-        //Look for 2 CSV with 2 matrix
-        //convert csv to rows and columns and create a matrix with them
-        //send matrix to server
-        //wait for response from server
+        //TODO: //wait for response from server
+
     }
 
+    /* Generate a simple Matrix */
     private Matrix buildMatrix1(){
         Matrix matrix1 = new Matrix();
         int[] array = {3,2,1};
@@ -57,6 +64,7 @@ class Client {
         return matrix1;
     }
 
+    /* Generate a simple Matrix */
     private Matrix buildMatrix2(){
         Matrix matrix2 = new Matrix();
         int[] array = {1,0,4};
@@ -67,5 +75,4 @@ class Client {
         matrix2.addColumn(col2);
         return matrix2;
     }
-
 }
