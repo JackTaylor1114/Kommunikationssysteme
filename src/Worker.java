@@ -1,6 +1,5 @@
 import org.apache.commons.lang.SerializationUtils;
 import org.zeromq.ZMQ;
-import java.io.IOException;
 
 class Worker {
 
@@ -26,14 +25,31 @@ class Worker {
         System.out.println(id+" connecting to server " + protocol + ip + port);
         socket.send("Worker", ZMQ.SNDMORE);
         socket.send(socket.getIdentity(), 0);
+        System.out.println(new String(socket.recv()));
 
-        //Get feedback by the server
-        byte[] message = socket.recv();
-        System.out.println(new String(message));
-
-        //Wait for Task
-
+        //Listen for messages with tasks
+        while (!Thread.currentThread().isInterrupted()) {
+            Task task  = (Task) SerializationUtils.deserialize(socket.recv());
+            if(task != null) {
+                task = calculate(task);
+                task.sign(this.id);
+                socket.send("Result", ZMQ.SNDMORE);
+                socket.send(SerializationUtils.serialize(task), 0);
+            }
+        }
         socket.close();
         context.term();
+    }
+
+    /* Calculate result from row and column and return the task */
+    private Task calculate(Task task) {
+        int i = 0;
+        int result = 0;
+        while(task.getDimension()<i) {
+            result = result + (task.getRow().getValues()[i] * task.getColumn().getValues()[i]);
+            i++;
+        }
+        task.setResult(result);
+        return task;
     }
 }

@@ -43,12 +43,13 @@ class Client {
             System.exit(0);
         }
         socket.send("newMatrix", ZMQ.SNDMORE);
+        socket.send(id, ZMQ.SNDMORE);
         socket.send(SerializationUtils.serialize(buildMatrix1()),ZMQ.SNDMORE);
         socket.send(SerializationUtils.serialize(buildMatrix2()),0);
         socket.close();
         context.term();
 
-        //TODO: //wait for response from server
+        //TODO: wait for response from server
 
     }
 
