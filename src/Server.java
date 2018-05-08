@@ -40,6 +40,16 @@ class Server {
                     socket.send("Server answers, everything is setup", 0);
                     break;
 
+                case "Worker":
+                    System.out.println("Worker connected");
+
+                    message = socket.recv();
+                    System.out.println("Worker ID: " + new String(message));
+
+                    socket.send(new String(message), ZMQ.SNDMORE);
+                    socket.send("Server answers, everything is setup", 0);
+                    break;
+
                 //Receive Matrices from Client
                 case "newMatrix":
                     System.out.println("Receiving matrices");
@@ -61,9 +71,6 @@ class Server {
                     taskCounter = taskCounter++;
 
                     break;
-
-                case "newMWorker":
-                    //React to worker connecting
 
                 case "Result:":
                     //Handle result from Task

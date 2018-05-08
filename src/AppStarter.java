@@ -13,7 +13,7 @@ class AppStarter {
                 break;
             case "worker":
                 Worker worker = new Worker();
-                worker.run();
+                worker.run(args[1]);
                 break;
         }
     }

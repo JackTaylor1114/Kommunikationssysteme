@@ -23,7 +23,7 @@ class Client {
         socket.connect(protocol + ip + port);
 
         //Connect to the server
-        System.out.println("Client connecting to Server " + protocol + ip + port);
+        System.out.println("Client connecting to server " + protocol + ip + port);
         socket.send("Client",ZMQ.SNDMORE);
         socket.send(socket.getIdentity(), 0);
 
