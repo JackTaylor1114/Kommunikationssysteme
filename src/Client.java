@@ -54,7 +54,7 @@ class Client {
 
     /* Generate a simple Matrix */
     private Matrix buildMatrix1(){
-        Matrix matrix1 = new Matrix();
+        Matrix matrix1 = new Matrix(2);
         int[] array = {3,2,1};
         MatrixRow row1 = new MatrixRow(array,1);
         int[] array2={1,0,2};
@@ -66,7 +66,7 @@ class Client {
 
     /* Generate a simple Matrix */
     private Matrix buildMatrix2(){
-        Matrix matrix2 = new Matrix();
+        Matrix matrix2 = new Matrix(2);
         int[] array = {1,0,4};
         MatrixColumn col1 = new MatrixColumn(array,1);
         int[] array2={2,1,0};

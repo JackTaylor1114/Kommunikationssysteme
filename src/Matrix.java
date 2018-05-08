@@ -6,8 +6,11 @@ public class Matrix implements Serializable {
 
     private ArrayList<MatrixRow> rows = new ArrayList<>();
     private ArrayList<MatrixColumn> columns = new ArrayList<>();
+    private int dimension;
 
-    public Matrix() {}
+    public Matrix(int dimension) {
+        this.dimension = dimension;
+    }
 
     /* Add a row */
     public void addRow(MatrixRow row) {
@@ -28,4 +31,6 @@ public class Matrix implements Serializable {
     public ArrayList<MatrixColumn> getColumns() {
         return columns;
     }
+
+    public int getDimension() { return dimension; }
 }

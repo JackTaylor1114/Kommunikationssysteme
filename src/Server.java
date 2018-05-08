@@ -1,6 +1,8 @@
 import org.apache.commons.lang.SerializationUtils;
 import org.zeromq.ZMQ;
 
+import java.util.Queue;
+
 class Server {
 
     @SuppressWarnings("all")
@@ -11,8 +13,8 @@ class Server {
     private final String protocol = "tcp://";
 
     //Attributes
-    private Matrix matrix1;
-    private Matrix matrix2;
+    private Queue<TaskDTO> tasks;
+    private int taskCounter = 0;
 
     /* Server RUN Method */
     void run() {
@@ -40,13 +42,24 @@ class Server {
 
                 //Receive Matrices from Client
                 case "newMatrix":
-                    System.out.println("Receiving Matrix");
+                    System.out.println("Receiving matrices");
 
                     message = socket.recv();
-                    matrix1  = (Matrix) SerializationUtils.deserialize(message);
+                    Matrix matrix1  = (Matrix) SerializationUtils.deserialize(message);
 
                     message = socket.recv();
-                    matrix2  = (Matrix) SerializationUtils.deserialize(message);
+                    Matrix matrix2  = (Matrix) SerializationUtils.deserialize(message);
+
+                    //Generate single tasks from the matrices and save them in a queue
+                    int i = 0;
+                    while(i<matrix1.getDimension()) {
+                        tasks.add(new TaskDTO(matrix2.getRows().get(i), matrix1.getColumns().get(i), taskCounter ));
+                        i++;
+                    }
+
+                    //Increase the taskCounter
+                    taskCounter = taskCounter++;
+
                     break;
 
                 case "newMWorker":
@@ -59,6 +72,8 @@ class Server {
                     System.out.println("Received message");
                     System.out.println("Unable to resolve sender or purpose");
             }
+
+            //Look for tasks to send
         }
         socket.close();
         context.term();
