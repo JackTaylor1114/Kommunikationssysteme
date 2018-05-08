@@ -15,7 +15,7 @@ class Worker {
 
     /* Worker RUN method */
     void run(String id) {
-        System.out.println("Worker is starting");
+        System.out.println(id+" is starting");
         ZMQ.Context context = ZMQ.context(1);
         ZMQ.Socket socket = context.socket(ZMQ.DEALER);
         this.id = "worker"+id;

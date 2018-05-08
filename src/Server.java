@@ -76,7 +76,8 @@ class Server {
                     //Handle result from Task
 
                 default:
-                    System.out.println("Received message");
+                    System.out.println("Received message:");
+                    System.out.println(new String(message));
                     System.out.println("Unable to resolve sender or purpose");
             }
 
