@@ -14,15 +14,15 @@ class Worker {
 
     /* Worker RUN method */
     void run(String id) {
-        System.out.println(id+" is starting");
+        this.id = "worker"+id;
+        System.out.println(this.id+" is starting");
         ZMQ.Context context = ZMQ.context(1);
         ZMQ.Socket socket = context.socket(ZMQ.DEALER);
-        this.id = "worker"+id;
-        socket.setIdentity(id.getBytes());
+        socket.setIdentity(this.id.getBytes());
         socket.connect(protocol + ip + port);
 
         //Connect to the server
-        System.out.println(id+" connecting to server " + protocol + ip + port);
+        System.out.println(this.id+" connecting to server " + protocol + ip + port);
         socket.send("Worker", ZMQ.SNDMORE);
         socket.send(socket.getIdentity(), 0);
         System.out.println(new String(socket.recv()));
@@ -31,10 +31,11 @@ class Worker {
         while (!Thread.currentThread().isInterrupted()) {
             Task task  = (Task) SerializationUtils.deserialize(socket.recv());
             if(task != null) {
-                task = calculate(task);
-                task.sign(this.id);
+                System.out.println("Received Task. Calculating...");
+                Result result = calculate(task);
+                result.setWorkerID(this.id);
                 socket.send("Result", ZMQ.SNDMORE);
-                socket.send(SerializationUtils.serialize(task), 0);
+                socket.send(SerializationUtils.serialize(result), 0);
             }
         }
         socket.close();
@@ -42,14 +43,13 @@ class Worker {
     }
 
     /* Calculate result from row and column and return the task */
-    private Task calculate(Task task) {
-        int i = 0;
-        int result = 0;
-        while(task.getDimension()<i) {
-            result = result + (task.getRow().getValues()[i] * task.getColumn().getValues()[i]);
-            i++;
+    private Result calculate(Task task) {
+        Result result = new Result(task.getColumn(),task.getRow(), task.getClientID());
+        int solution = 0;
+        for (int i = 0; i < task.getCalcLength(); i++) {
+            solution = solution + (task.getRowData()[i] * task.getColumnData()[i]);
         }
-        task.setResult(result);
-        return task;
+        result.setResult(solution);
+        return result;
     }
 }

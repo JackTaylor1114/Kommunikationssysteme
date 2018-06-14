@@ -2,6 +2,8 @@ import org.apache.commons.lang.SerializationUtils;
 import org.zeromq.ZMQ;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 class Client {
 
@@ -42,10 +44,38 @@ class Client {
             context.term();
             System.exit(0);
         }
-        socket.send("newMatrix", ZMQ.SNDMORE);
-        socket.send(id, ZMQ.SNDMORE);
-        socket.send(SerializationUtils.serialize(buildMatrix1()),ZMQ.SNDMORE);
-        socket.send(SerializationUtils.serialize(buildMatrix2()),0);
+        Matrix matrix1 = buildMatrix1();
+        Matrix matrix2 = buildMatrix2();
+        //TODO: Matrix Dimensionen Prüfen
+        List<Task> tasks = new ArrayList<>(){};
+        for (int rowi = 0; rowi < matrix1.getRows(); rowi++) {
+            for (int coli = 0; coli < matrix2.getCols(); coli++) {
+                tasks.add(new Task(matrix1.getRow(rowi),matrix2.getCol(coli),rowi,coli,id));
+            }
+        }
+        for (int i = 0; i < tasks.size(); i++) {
+            socket.send("newTask", ZMQ.SNDMORE);
+            socket.send(SerializationUtils.serialize(tasks.get(i)),0);
+            System.out.println("Task sent!");
+        }
+        /* creating Matrix to store result of multiplication*/
+        Matrix result = new Matrix(matrix1.getRows(),matrix2.getCols());
+
+        /*waiting for Matrix to be filled*/
+        while(result.isSomethingNull()){
+            Result resultObj  = (Result) SerializationUtils.deserialize(socket.recv());
+            if(result != null) {
+                System.out.println("Received Result");
+                result.setData(resultObj.getRow(),resultObj.getCol(),resultObj.getResult());
+            }
+        }
+
+        System.out.println("Multiplication finished.");
+        System.out.println("Result:");
+        result.print();
+
+
+
         socket.close();
         context.term();
 

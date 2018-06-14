@@ -55,26 +55,22 @@ class Server {
                     break;
 
                 //React when client sends matrices
-                case "newMatrix":
-                    System.out.println("Receiving matrices");
-                    String requesterID = new String(socket.recv());
-                    //Convert messages to matrices
+                case "newTask":
+                    System.out.println("Receiving Task");
+                    //Convert message to task, adding Task to taskList
                     message = socket.recv();
-                    Matrix matrix1  = (Matrix) SerializationUtils.deserialize(message);
-                    message = socket.recv();
-                    Matrix matrix2  = (Matrix) SerializationUtils.deserialize(message);
-                    //Generate single tasks from the matrices and save them in a queue
-                    int i = 0;
-                    while(i<matrix1.getDimension()) {
-                        tasks.add(new Task(matrix2.getRows().get(i), matrix1.getColumns().get(i), requesterID, taskCounter, matrix1.getDimension()));
-                        i++;
-                    }
-                    //Increase the taskCounter
-                    taskCounter = taskCounter++;
+                    tasks.add((Task) SerializationUtils.deserialize(message));
                     break;
 
-                case "Result:":
+                case "Result":
                     System.out.println("Receiving result!");
+                    message = socket.recv();
+                    Result result = ((Result) SerializationUtils.deserialize(message));
+                    workers.add(result.getWorkerID());
+                    System.out.println("Sending result to client");
+                    socket.send(result.getClientID(), ZMQ.SNDMORE);
+                    socket.send(SerializationUtils.serialize(result), 0);
+                    break;
 
                     //TODO: Handle result (add worker to list, send result to client)
             }
