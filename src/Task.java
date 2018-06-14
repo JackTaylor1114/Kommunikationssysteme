@@ -2,33 +2,42 @@ import java.io.Serializable;
 
 class Task implements Serializable {
 
-    private MatrixColumn column;
-    private MatrixRow row;
-    private int result = 0;
-    private int tasknumber;
-    private int dimension = 0;
-    private String signature;
+    private int[] columnData;
+    private int[] rowData;
+    private int column;
+    private int row;
+    private String clientID;
 
-    public Task(MatrixRow row, MatrixColumn column, String requesterID, int tasknumber, int dimension) {
+
+    public Task(int[] rowData, int[] columnData, int row, int column, String clientID) {
+        this.columnData=columnData;
+        this.rowData=rowData;
         this.row = row;
         this.column = column;
-        this.tasknumber = tasknumber;
-        this.dimension = dimension;
+        this.clientID=clientID;
     }
 
-    public void sign(String signature){ this.signature = signature; }
+    public int[] getColumnData() {
+        return columnData;
+    }
 
-    public void setResult(int result) { this.result=result; }
+    public int[] getRowData() {
+        return rowData;
+    }
 
-    public MatrixColumn getColumn() { return column; }
+    public int getColumn() {
+        return column;
+    }
 
-    public MatrixRow getRow() { return row; }
+    public int getRow() {
+        return row;
+    }
 
-    public int getResult() { return result; }
+    public int getCalcLength(){
+        return columnData.length;
+    }
 
-    public int getTasknumber() { return tasknumber; }
-
-    public String getSignature(){ return signature; }
-
-    public int getDimension() { return dimension; }
+    public String getClientID() {
+        return clientID;
+    }
 }
