@@ -49,31 +49,32 @@ class Client {
         socket.close();
         context.term();
 
-        //TODO: wait for response from server
-
     }
 
     /* Generate a simple Matrix */
     private Matrix buildMatrix1(){
-        Matrix matrix1 = new Matrix(2);
-        int[] array = {3,2,1};
-        MatrixRow row1 = new MatrixRow(array,1);
-        int[] array2={1,0,2};
-        MatrixRow row2 = new MatrixRow(array2, 2);
-        matrix1.addRow(row1);
-        matrix1.addRow(row2);
+        Matrix matrix1 = new Matrix(3,2);
+        matrix1.setData(0,0,3);
+        matrix1.setData(0,1,2);
+        matrix1.setData(0,2,1);
+
+        matrix1.setData(1,0,1);
+        matrix1.setData(1,1,0);
+        matrix1.setData(1,2,2);
         return matrix1;
     }
 
     /* Generate a simple Matrix */
     private Matrix buildMatrix2(){
-        Matrix matrix2 = new Matrix(2);
-        int[] array = {1,0,4};
-        MatrixColumn col1 = new MatrixColumn(array,1);
-        int[] array2={2,1,0};
-        MatrixColumn col2 = new MatrixColumn(array2, 2);
-        matrix2.addColumn(col1);
-        matrix2.addColumn(col2);
+        Matrix matrix2 = new Matrix(2,3);
+        matrix2.setData(0,0,1);
+        matrix2.setData(0,1,2);
+
+        matrix2.setData(1,0,0);
+        matrix2.setData(1,1,1);
+
+        matrix2.setData(2,0,4);
+        matrix2.setData(2,1,0);
         return matrix2;
     }
 }
