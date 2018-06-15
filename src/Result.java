@@ -1,5 +1,6 @@
 import java.io.Serializable;
 
+/* Result class that represents a calculation result */
 class Result implements Serializable {
 
     private int result;
@@ -8,37 +9,45 @@ class Result implements Serializable {
     private String clientID;
     private String workerID;
 
-    public Result(int col, int row, String clientID){
+    /* Result constructor */
+    Result(int col, int row, String clientID){
         this.row=row;
         this.col=col;
         this.clientID=clientID;
     }
 
-    public int getResult() {
+    /* Returns the result */
+    int getResult() {
         return result;
     }
 
-    public void setResult(int result) {
+    /* Sets the result */
+    void setResult(int result) {
         this.result = result;
     }
 
-    public int getCol() {
+    /* Returns the column index */
+    int getCol() {
         return col;
     }
 
-    public int getRow() {
+    /* Returns the row index */
+    int getRow() {
         return row;
     }
 
-    public String getClientID() {
+    /* Returns client ID */
+    String getClientID() {
         return clientID;
     }
 
-    public String getWorkerID() {
+    /* Returns the worker ID */
+    String getWorkerID() {
         return workerID;
     }
 
-    public void setWorkerID(String workerID) {
+    /* Sets the worker ID */
+    void setWorkerID(String workerID) {
         this.workerID = workerID;
     }
 }

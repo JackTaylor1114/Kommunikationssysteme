@@ -1,5 +1,6 @@
 import java.io.Serializable;
 
+/* Task class representing a single task */
 class Task implements Serializable {
 
     private int[] columnData;
@@ -8,8 +9,8 @@ class Task implements Serializable {
     private int row;
     private String clientID;
 
-
-    public Task(int[] rowData, int[] columnData, int row, int column, String clientID) {
+    /* Task constructor */
+    Task(int[] rowData, int[] columnData, int row, int column, String clientID) {
         this.columnData=columnData;
         this.rowData=rowData;
         this.row = row;
@@ -17,27 +18,31 @@ class Task implements Serializable {
         this.clientID=clientID;
     }
 
-    public int[] getColumnData() {
+    /* Return column data */
+    int[] getColumnData() {
         return columnData;
     }
 
-    public int[] getRowData() {
+    /* Return row data */
+    int[] getRowData() {
         return rowData;
     }
 
-    public int getColumn() {
+    /* Return a column */
+    int getColumn() {
         return column;
     }
 
-    public int getRow() {
+    /* Return a row */
+    int getRow() {
         return row;
     }
 
-    public int getCalcLength(){
+    /* Return the calculation length */
+    int getCalcLength(){
         return columnData.length;
     }
 
-    public String getClientID() {
-        return clientID;
-    }
+    /* Return the client ID */
+    String getClientID() { return clientID; }
 }

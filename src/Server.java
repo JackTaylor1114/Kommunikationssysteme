@@ -4,6 +4,7 @@ import org.zeromq.ZMQ;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/* Server class that represents the middleware */
 class Server {
 
     @SuppressWarnings("all")
@@ -16,11 +17,12 @@ class Server {
     //Attributes
     private Queue<Task> tasks = new LinkedList<>(){};
     private Queue<String> workers = new LinkedList<>();
-    private int taskCounter = 0;
     private ZMQ.Socket socket;
 
     /* Server RUN Method */
     void run() {
+
+        //Setup
         System.out.println("Server is starting");
         ZMQ.Context context = ZMQ.context(1);
         socket = context.socket(ZMQ.ROUTER);
@@ -62,6 +64,7 @@ class Server {
                     tasks.add((Task) SerializationUtils.deserialize(message));
                     break;
 
+                //React when worker sends a result
                 case "Result":
                     System.out.println("Receiving result!");
                     message = socket.recv();
@@ -71,8 +74,6 @@ class Server {
                     socket.send(result.getClientID(), ZMQ.SNDMORE);
                     socket.send(SerializationUtils.serialize(result), 0);
                     break;
-
-                    //TODO: Handle result (add worker to list, send result to client)
             }
 
             //If queued task exist, forward one to a worker

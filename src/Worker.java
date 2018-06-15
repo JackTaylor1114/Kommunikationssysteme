@@ -1,6 +1,7 @@
 import org.apache.commons.lang.SerializationUtils;
 import org.zeromq.ZMQ;
 
+/* Worker class representing a calculation worker */
 class Worker {
 
     @SuppressWarnings("all")
@@ -14,6 +15,8 @@ class Worker {
 
     /* Worker RUN method */
     void run(String id) {
+
+        //Setup
         this.id = "worker"+id;
         System.out.println(this.id+" is starting");
         ZMQ.Context context = ZMQ.context(1);

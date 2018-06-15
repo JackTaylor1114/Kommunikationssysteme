@@ -7,42 +7,51 @@ public class Matrix{
     private int rows;
     private int cols;
 
+    /* Matrix constructor */
     public Matrix(Integer[][] data){
         this.data=data;
         rows = this.data.length;
         cols = this.data[0].length;
     }
-    public Matrix(int cols, int rows){
+
+    /* Matrix constructor */
+    Matrix(int cols, int rows){
         this.rows=rows;
         this.cols=cols;
         this.data= new Integer[rows][cols];
     }
 
-    public void setData(int row, int col, int data){
+    /* Set the matrix data */
+    void setData(int row, int col, int data){
         this.data[row][col]=data;
     }
 
-    public int getRows() {
+    /* Return matrix rows */
+    int getRows() {
         return rows;
     }
 
-    public int getCols() {
+    /* Return matrix columns */
+    int getCols() {
         return cols;
     }
 
-    public int[] getRow(int row){
+    /* Return matrix row */
+    int[] getRow(int row){
         return Arrays.stream(data[row]).mapToInt(Integer::intValue).toArray();
     }
 
-    public int[] getCol(int col){
+    /* Return matrix column */
+    int[] getCol(int col){
         int[] column = new int[rows];
         for (int i = 0; i < rows; i++) {
-            column[i]=data[i][col].intValue();
+            column[i]=data[i][col];
         }
         return column;
     }
 
-    public boolean isSomethingNull(){
+    /* Check if any entry is null */
+    boolean isSomethingNull(){
         for (int rowi = 0; rowi < rows; rowi++) {
             for (int coli = 0; coli < cols; coli++) {
                 if(data[rowi][coli]==null)
@@ -52,7 +61,8 @@ public class Matrix{
         return false;
     }
 
-    public void print(){
+    /* Print out the matrix */
+    void print(){
         for (int rowi = 0; rowi < rows; rowi++) {
             for (int coli = 0; coli < cols; coli++) {
                 System.out.print(data[rowi][coli]+" ");

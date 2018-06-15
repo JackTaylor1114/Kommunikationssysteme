@@ -1,10 +1,10 @@
 import org.apache.commons.lang.SerializationUtils;
 import org.zeromq.ZMQ;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/* Client class for basic client options */
 class Client {
 
     @SuppressWarnings("all")
@@ -18,6 +18,8 @@ class Client {
 
     /* Client RUN method */
     void run() {
+
+        //Setup
         System.out.println("Client is starting");
         ZMQ.Context context = ZMQ.context(1);
         ZMQ.Socket socket = context.socket(ZMQ.DEALER);
@@ -29,12 +31,12 @@ class Client {
         socket.send("Client",ZMQ.SNDMORE);
         socket.send(socket.getIdentity(), 0);
 
-        //Get feedback by the server
+        //Get feedback from the server
         byte[] message = socket.recv();
         System.out.println(new String (message));
 
         //Wait for console input and then send matrices to server
-        System.out.println("Press any KEY to send matrix to the server!");
+        System.out.println("Enter any input to send matrix to the server!");
         try {
             System.in.read();
         }
@@ -46,42 +48,38 @@ class Client {
         }
         Matrix matrix1 = buildMatrix1();
         Matrix matrix2 = buildMatrix2();
-        //TODO: Matrix Dimensionen Prüfen
         List<Task> tasks = new ArrayList<>(){};
         for (int rowi = 0; rowi < matrix1.getRows(); rowi++) {
             for (int coli = 0; coli < matrix2.getCols(); coli++) {
                 tasks.add(new Task(matrix1.getRow(rowi),matrix2.getCol(coli),rowi,coli,id));
             }
         }
-        for (int i = 0; i < tasks.size(); i++) {
+        for(Task task: tasks) {
             socket.send("newTask", ZMQ.SNDMORE);
-            socket.send(SerializationUtils.serialize(tasks.get(i)),0);
+            socket.send(SerializationUtils.serialize(task),0);
             System.out.println("Task sent!");
         }
-        /* creating Matrix to store result of multiplication*/
+
+        /* Create a matrix to store result of the multiplication */
         Matrix result = new Matrix(matrix1.getRows(),matrix2.getCols());
 
-        /*waiting for Matrix to be filled*/
+        /* Wait for matrix to be filled */
         while(result.isSomethingNull()){
             Result resultObj  = (Result) SerializationUtils.deserialize(socket.recv());
-            if(result != null) {
-                System.out.println("Received Result");
-                result.setData(resultObj.getRow(),resultObj.getCol(),resultObj.getResult());
-            }
+            System.out.println("Received Result");
+            result.setData(resultObj.getRow(),resultObj.getCol(),resultObj.getResult());
         }
 
+        /* Finish and terminate client */
         System.out.println("Multiplication finished.");
         System.out.println("Result:");
         result.print();
-
-
-
         socket.close();
         context.term();
 
     }
 
-    /* Generate a simple Matrix */
+    /* Generate a simple matrix */
     private Matrix buildMatrix1(){
         Matrix matrix1 = new Matrix(3,2);
         matrix1.setData(0,0,3);
@@ -94,7 +92,7 @@ class Client {
         return matrix1;
     }
 
-    /* Generate a simple Matrix */
+    /* Generate a simple matrix */
     private Matrix buildMatrix2(){
         Matrix matrix2 = new Matrix(2,3);
         matrix2.setData(0,0,1);
